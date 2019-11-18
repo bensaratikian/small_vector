@@ -1,3 +1,5 @@
+#define private public
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -5,9 +7,11 @@
 #include <chrono>
 #include <variant>
 #include <cmath>
-#include "small_vector.h"
 #include <boost/container/small_vector.hpp>
 #include <memory>
+#include <cassert>
+#include "small_vector.h"
+
 
 struct Foo {
     Foo() {
@@ -137,11 +141,39 @@ struct A {
 //    return 0;
 //}
 
+
 int main() {
-    small_vector<int, 3> v;
-    v.push_back(1);
-    v.push_back(2);
-    v.push_back(3);
-    v.push_back(4);
+    small_vector<std::string, 10> v = {"a", "b", "c", "d", "e"};
+    small_vector<std::string, 10> q;
+    
+    assert(!v.empty());
+    assert(q.empty());
+    
+    assert(v != q);
+    q = v;
+    assert(v == q);
+    assert(v.size() == q.size());
+    
+    q.push_back("a");
+    q.push_back("b");
+    q.push_back("c");
+    q.push_back("d");
+    q.push_back("e");
+    
+    assert(v.size() == q.size() - 5);
+    q.pop_back();
+    q.pop_back();
+    q.pop_back();
+    q.pop_back();
+    q.pop_back();
+
+    assert(v == q);
+    
+    v.resize(3);
+    q.resize(3);
+    
+    assert(v.size() == q.size());
+    assert(v == q);
+    
     return 0;
 }
